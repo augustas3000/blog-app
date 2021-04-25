@@ -14,7 +14,7 @@
               href="/webjars/bootstrap/4.0.0/css/bootstrap.min.css"/>
 
         <!-- Custom styles for this template -->
-        <link href="/static/css/blog-post.css" rel="stylesheet">
+        <link href="/css/blog-post.css" rel="stylesheet">
 
         <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>
     </head>
@@ -72,8 +72,8 @@
                             <div class="input-group">
                                 <input type="text" name="q" class="form-control" placeholder="Search for...">
                                 <span class="input-group-btn">
-                  <input type="submit" class="btn btn-secondary" value="Go!"/>
-                </span>
+                                    <input type="submit" class="btn btn-secondary" value="Go!"/>
+                                </span>
                             </div>
                         </form>
                     </div>
@@ -99,6 +99,5 @@
     <script src="/webjars/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
 
     </body>
-
     </html>
 </#macro>
