@@ -1,4 +1,4 @@
-<#import "../common/standardPage.ftlh" as p>
+<#import "../common/standardPage.ftl" as p>
 
 <#if article??>
     <@p.page title="${article.title}">
