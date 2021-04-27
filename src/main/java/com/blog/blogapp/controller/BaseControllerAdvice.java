@@ -3,6 +3,8 @@ package com.blog.blogapp.controller;
 import com.blog.blogapp.exception.NotFoundException;
 import com.blog.blogapp.model.User;
 import com.blog.blogapp.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,14 +38,12 @@ public class BaseControllerAdvice {
 
     @ModelAttribute
     public void addCommonAttributes(
-//            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             Model model) {
-//        if (userDetails != null) {
-//            User user = userService.getByUsername(userDetails.getUsername());
-        User user = new User();
-        user.setUsername("Augustas");
-        model.addAttribute("user", user);
-//        }
+        if (userDetails != null) {
+            User user = userService.getByUsername(userDetails.getUsername());
+            model.addAttribute("user", user);
+        }
     }
 }
 

@@ -6,6 +6,27 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName = "blog_user")
 public class User {
+
+    @Id
+    private String id;
+
+    private String username;
+
+    private String password;
+
+    private String role;
+
+    private String description;
+
+
+    public User(String id, String username, String password, String role, String description) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.description = description;
+    }
+
     public String getId() {
         return id;
     }
@@ -45,16 +66,4 @@ public class User {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Id
-    private String id;
-
-    private String username;
-
-    private String password;
-
-    private String role;
-
-    private String description;
-
 }

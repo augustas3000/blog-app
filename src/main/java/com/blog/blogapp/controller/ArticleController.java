@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,12 +37,15 @@ public class ArticleController {
     @GetMapping
     public String index(
             Model model,
-//                        @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(required = false, value = "query") String query,
             @RequestParam(required = false, value = "page") Integer page,
             @RequestParam(required = false, value = "size") Integer size
     ) {
 
+        //to make this proper non-blocking we need completable futures,
+        //in spring webflux its a Mono - 0..1 elements
+        //Flux - 0..N
         if (query == null) {
             model.addAttribute("articles",
                     articleService.getAll(getPageable(page, size)));
@@ -54,7 +59,7 @@ public class ArticleController {
 
     @GetMapping("/show/{link}")
     public String getPost(
-//            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable String link,
             Model model
     ) {
@@ -75,7 +80,7 @@ public class ArticleController {
 
     @GetMapping("/edit/{id}")
     public String editPost(
-//            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable String id,
             Model model
     ) {
@@ -90,12 +95,12 @@ public class ArticleController {
     }
 
     private String throwNotFoundException(@PathVariable String id) {
-        throw new NotFoundException("Article Not Found for "+id);
+        throw new NotFoundException("Article Not Found for " + id);
     }
 
     @PostMapping("/delete/{id}")
     public String deletePost(
-//            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable String id,
             Model model
     ) {
@@ -109,13 +114,12 @@ public class ArticleController {
 
     @PostMapping
     public String savePost(
-//            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserDetails userDetails,
             Article article,
             Model model
     ) {
         if (article.getId() == null || article.getId().length() == 0) {
-//            User user = userService.getByUsername(userDetails.getUsername());
-            User user = new User();
+            User user = userService.getByUsername(userDetails.getUsername());
             article.setAuthor(user);
         } else {
             Optional<Article> optionalArticle = articleService.getById(article.getId());
@@ -123,7 +127,7 @@ public class ArticleController {
         }
         articleService.save(article);
 
-        return "redirect:/article/show/"+article.getLink();
+        return "redirect:/article/show/" + article.getLink();
     }
 
     @GetMapping("/rest")
